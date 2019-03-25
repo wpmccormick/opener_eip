@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>opener_ros</name>
+  <version>2.2.1</version>
+  <description>The OpENer Catkin Package</description>
+  <maintainer email="wmccormick@swri.org">Bill McCormick</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+
+</package>

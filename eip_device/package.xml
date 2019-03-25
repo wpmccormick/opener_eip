@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>eip_device</name>
+  <version>0.1.0</version>
+  <description>The eip_device Catkin Package</description>
+  <maintainer email="wmccormick@swri.org">Bill McCormick</maintainer>
+  <license>BSD</license>
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>opener_ros</depend>
+  <depend>roscpp</depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+
+</package>

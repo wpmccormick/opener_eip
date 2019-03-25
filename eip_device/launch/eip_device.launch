@@ -1,0 +1,12 @@
+<launch>
+<arg name="device" default="eno1" />
+<arg name="frequency" default="100" />
+<arg name="debug" default="false" />
+
+<node pkg="eip_device" type="eip_device_node" name="eip_device" output="screen">
+  <param name="debug" type="bool" value="$(arg debug)" />
+  <param name="frequency" type="double" value="$(arg frequency)" />
+  <param name="device" value="$(arg device)" />
+</node>
+
+</launch>
