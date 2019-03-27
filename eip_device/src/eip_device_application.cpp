@@ -100,14 +100,16 @@ EipStatus AfterAssemblyDataReceived(CipInstance *instance) {
 
   /*handle the data received e.g., update outputs of the device */
   switch (instance->instance_number) {
-    case OUTPUT_ASSEMBLY_NUM : break;
-    case EXPLICT_ASSEMBLY_NUM: break;
+    case OUTPUT_ASSEMBLY_NUM :
+      break;
+    case EXPLICT_ASSEMBLY_NUM:
+      OPENER_TRACE_INFO("AfterAssemblyDataReceived EXPLICT_ASSEMBLY_NUM handle the data received\n");
+      break;
     case CONFIG_ASSEMBLY_NUM :
       status = kEipStatusOk;
       break;
     default:
-      OPENER_TRACE_INFO(
-        "Unknown assembly instance ind AfterAssemblyDataReceived");
+      OPENER_TRACE_INFO("Unknown assembly instance ind AfterAssemblyDataReceived");
       break;
   }
   return status;
@@ -123,6 +125,7 @@ EipBool8 BeforeAssemblyDataSend(CipInstance *pa_pstInstance) {
   if (pa_pstInstance->instance_number == EXPLICT_ASSEMBLY_NUM) {
     /* do something interesting with the existing data
      * for the explicit get-data-attribute message */
+    OPENER_TRACE_INFO("BeforeAssemblyDataSend EXPLICT_ASSEMBLY_NUM handle the data received\n");
   }
   return true;
 }

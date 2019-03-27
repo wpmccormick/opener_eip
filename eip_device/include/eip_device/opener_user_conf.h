@@ -6,6 +6,9 @@
 #ifndef OPENER_USER_CONF_H_
 #define OPENER_USER_CONF_H_
 
+#define OPENER_WITH_TRACES
+#define OPENER_TRACE_LEVEL OPENER_TRACE_LEVEL_INFO
+
 /** @file POSIX/sample_application/opener_user_conf.h
  * @brief OpENer configuration setup
  *
@@ -122,7 +125,7 @@ static const MilliSeconds kOpenerTimerTickInMilliSeconds = 10;
 #else
 
 /* for release builds remove assertion */
-#define OPENER_ASSERT(assertion)
+//#define OPENER_ASSERT(assertion)
 
 /* if there are any strange timing issues, you can try the version below, where the assertion is performed but the assert
  * function is not used
