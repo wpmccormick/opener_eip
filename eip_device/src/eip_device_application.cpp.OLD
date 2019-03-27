@@ -18,10 +18,18 @@ extern "C" {
 
 #include "eip_device.h"
 
+#define INPUT_ASSEMBLY_NUM                100 //0x064
+#define OUTPUT_ASSEMBLY_NUM               150 //0x096
+#define CONFIG_ASSEMBLY_NUM               151 //0x097
+#define HEARTBEAT_INPUT_ONLY_ASSEMBLY_NUM  152 //0x098
+#define HEARTBEAT_LISTEN_ONLY_ASSEMBLY_NUM 153 //0x099
+#define EXPLICT_ASSEMBLY_NUM              154 //0x09A
+
+/* global variables for demo application (4 assembly data fields)  ************/
+
 extern CipUint g_encapsulation_inactivity_timeout;
 extern EipDevice eipDevice;
 
-/* global variables for application (4 assembly data fields)  ************/
 EipUint8 g_assembly_data064[32]; /* Input */
 EipUint8 g_assembly_data096[32]; /* Output */
 EipUint8 g_assembly_data097[10]; /* Config */

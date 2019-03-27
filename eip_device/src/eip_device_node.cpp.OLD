@@ -46,6 +46,16 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "eip_device");
   ros::NodeHandle nh("~");
 
+  bool debug;
+  nh.param<bool>("debug", debug, true);
+  ROS_INFO_STREAM("debug is: " << debug);
+
+  while (debug)
+  {
+    sleep(1);
+    nh.getParam("debug", debug);
+  }
+
   ROS_INFO("Starting eip_device ...");
 
   ros::Time::init();
@@ -120,21 +130,17 @@ int main(int argc, char **argv)
     exit(0);
   }
 
-  //****** ROS Interface ******
   //a topic to publish to for data FROM the PLC
-  ros::Publisher eip_data_pub = nh.advertise<eip_device::EipDataAsmOut>("eip_data_fmplc", 1);
+  ros::Publisher eip_data_pub = nh.advertise<eip_device::EipDataFmPLC>("eip_data_fmplc", 1);
 
   //a topic to publish to for config FROM the PLC
-  ros::Publisher eip_config_pub = nh.advertise<eip_device::EipDataAsmCfg>("eip_data_config", 1);
+  ros::Publisher eip_config_pub = nh.advertise<eip_device::EipConfig>("eip_data_config", 1);
 
   //a topic to publish to for data FROM the PLC
   ros::Publisher eip_status_pub = nh.advertise<eip_device::EipDeviceStatus>("eip_status", 100);
 
-  //a top to subcribe to for UNSOLICITED data TO the PLC
-  ros::Subscriber eip_unsol_data_sub = nh.subscribe("eip_data_toplc_u", 1, &EipDevice::LoadAsmIn_Callback, &eipDevice);
-
-  //a top to subcribe to for SOLICITED (explicit assembly) data TO the PLC
-  ros::Subscriber eip_sol_data_sub = nh.subscribe("eip_data_toplc_s", 1, &EipDevice::LoadAsmIn_Callback, &eipDevice);
+  //a top to subcribe to for data TO the PLC
+  ros::Subscriber eip_data_sub = nh.subscribe("eip_data_toplc", 1, &EipDevice::toplcCallback, &eipDevice);
 
   ROS_INFO("Starting Process Loop");
   int EipStatus = kEipStatusOk;
@@ -151,14 +157,14 @@ int main(int argc, char **argv)
     }
 
     //copy data from the output assembly array to the message topic
-    eipDevice.data_asm_out.raw_plc_data.assign(g_assembly_data096, g_assembly_data096 + OUTPUT_ASSEMBLY_BUFFER_SIZE);
+    eipDevice.data_fmplc.raw_plc_data.assign(g_assembly_data096, g_assembly_data096 + 32);
 
     //copy data from the config assembly array to the message topic
-    eipDevice.data_asm_cfg.raw_plc_data.assign(g_assembly_data097, g_assembly_data097 + CONFIG_ASSEMBLY_BUFFER_SIZE);
+    eipDevice.data_config.raw_plc_data.assign(g_assembly_data097, g_assembly_data097 + 10);
 
     //and publish
-    eip_data_pub.publish(eipDevice.data_asm_out);
-    eip_config_pub.publish(eipDevice.data_asm_cfg);
+    eip_data_pub.publish(eipDevice.data_fmplc);
+    eip_config_pub.publish(eipDevice.data_config);
     eip_status_pub.publish(eipDevice.device_status);
 
     ros::spinOnce();
