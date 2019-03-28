@@ -134,7 +134,7 @@ int main(int argc, char **argv)
   ros::Subscriber eip_unsol_data_sub = nh.subscribe("eip_data_toplc_u", 1, &EipDevice::LoadAsmIn_Callback, &eipDevice);
 
   //a top to subcribe to for SOLICITED (explicit assembly) data TO the PLC
-  ros::Subscriber eip_sol_data_sub = nh.subscribe("eip_data_toplc_s", 1, &EipDevice::LoadAsmIn_Callback, &eipDevice);
+  ros::Subscriber eip_sol_data_sub = nh.subscribe("eip_data_toplc_s", 1, &EipDevice::LoadAsmExp_Callback, &eipDevice);
 
   ROS_INFO("Starting Process Loop");
   int EipStatus = kEipStatusOk;

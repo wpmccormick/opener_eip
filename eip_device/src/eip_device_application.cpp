@@ -17,15 +17,16 @@ extern "C" {
 }
 
 #include "eip_device.h"
+#include <ros/ros.h>
 
 extern CipUint g_encapsulation_inactivity_timeout;
 extern EipDevice eipDevice;
 
 /* global variables for application (4 assembly data fields)  ************/
-EipUint8 g_assembly_data064[32]; /* Input */
-EipUint8 g_assembly_data096[32]; /* Output */
-EipUint8 g_assembly_data097[10]; /* Config */
-EipUint8 g_assembly_data09A[32]; /* Explicit */
+EipUint8 g_assembly_data064[INPUT_ASSEMBLY_BUFFER_SIZE]; /* Input */
+EipUint8 g_assembly_data096[OUTPUT_ASSEMBLY_BUFFER_SIZE]; /* Output */
+EipUint8 g_assembly_data097[CONFIG_ASSEMBLY_BUFFER_SIZE]; /* Config */
+EipUint8 g_assembly_data09A[EXPLICIT_ASSEMBLY_BUFFER_SIZE]; /* Explicit */
 
 EipStatus ApplicationInitialization(void) {
   /* create 3 assembly object instances*/
@@ -80,15 +81,19 @@ void CheckIoConnectionEvent(unsigned int output_assembly_id,
   {
     case kIoConnectionEventClosed:
       eipDevice.device_status.description = "Device Closed";
+      ROS_WARN("Device Closed");
       break;
     case kIoConnectionEventOpened:
       eipDevice.device_status.description = "Device Opened";
+      ROS_INFO("Device Opened");
       break;
     case kIoConnectionEventTimedOut:
       eipDevice.device_status.description = "Device Timed Out";
+      ROS_WARN("Device Timeout");
       break;
     default:
       eipDevice.device_status.description = "Device Status Not Defined";
+      ROS_WARN("Device Status Not Defined");
   }
 
   (void) output_assembly_id; /* suppress compiler warning */
@@ -100,16 +105,13 @@ EipStatus AfterAssemblyDataReceived(CipInstance *instance) {
 
   /*handle the data received e.g., update outputs of the device */
   switch (instance->instance_number) {
-    case OUTPUT_ASSEMBLY_NUM :
-      break;
-    case EXPLICT_ASSEMBLY_NUM:
-      OPENER_TRACE_INFO("AfterAssemblyDataReceived EXPLICT_ASSEMBLY_NUM handle the data received\n");
-      break;
+    case OUTPUT_ASSEMBLY_NUM : break;
+    case EXPLICT_ASSEMBLY_NUM: break;
     case CONFIG_ASSEMBLY_NUM :
       status = kEipStatusOk;
       break;
     default:
-      OPENER_TRACE_INFO("Unknown assembly instance ind AfterAssemblyDataReceived");
+      ROS_WARN("Unknown assembly instance requested");
       break;
   }
   return status;
@@ -125,7 +127,6 @@ EipBool8 BeforeAssemblyDataSend(CipInstance *pa_pstInstance) {
   if (pa_pstInstance->instance_number == EXPLICT_ASSEMBLY_NUM) {
     /* do something interesting with the existing data
      * for the explicit get-data-attribute message */
-    OPENER_TRACE_INFO("BeforeAssemblyDataSend EXPLICT_ASSEMBLY_NUM handle the data received\n");
   }
   return true;
 }
@@ -133,6 +134,7 @@ EipBool8 BeforeAssemblyDataSend(CipInstance *pa_pstInstance) {
 EipStatus ResetDevice(void) {
   /* add reset code here*/
   CloseAllConnections();
+  ROS_WARN("Device Reset");
   return kEipStatusOk;
 }
 
@@ -155,6 +157,7 @@ void CipFree(void *data) {
 }
 
 void RunIdleChanged(EipUint32 run_idle_value) {
+  ROS_INFO("Run/Idle handler triggered");
   OPENER_TRACE_INFO("Run/Idle handler triggered\n");
   if( (0x0001 & run_idle_value) == 1 ) {
     CipIdentitySetExtendedDeviceStatus(kAtLeastOneIoConnectionInRunMode);

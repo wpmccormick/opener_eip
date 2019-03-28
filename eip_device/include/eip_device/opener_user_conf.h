@@ -6,8 +6,8 @@
 #ifndef OPENER_USER_CONF_H_
 #define OPENER_USER_CONF_H_
 
-#define OPENER_WITH_TRACES
-#define OPENER_TRACE_LEVEL OPENER_TRACE_LEVEL_INFO
+//#define OPENER_WITH_TRACES
+//#define OPENER_TRACE_LEVEL OPENER_TRACE_LEVEL_INFO
 
 /** @file POSIX/sample_application/opener_user_conf.h
  * @brief OpENer configuration setup
