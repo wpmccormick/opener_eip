@@ -5,11 +5,13 @@
 ## Dependencies
 ## Installation
 ### ROS Installation
+```
 cd ~/catkin_ws/src
 catkin init
 git clone --recursive git@github.com:wpmccormick/eip_device.git
 catkin build
 ldconfig ../devel/lib/eip_device
+```
 ### PLC (Logix5000) Installation
 1. Copy eip_device/data
 ## Usage
